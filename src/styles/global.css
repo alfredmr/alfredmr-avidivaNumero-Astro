@@ -102,7 +102,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 56px 20px 20px;
+    padding: 56px 20px 24px;
     transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -217,8 +217,50 @@ body {
 /* Contenido interactivo por encima del fondo */
 .secreto-display,
 .card,
-.app-toolbar {
+.app-toolbar,
+.app-footer {
     pointer-events: auto;
+}
+
+/* Footer */
+.app-footer {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 480px;
+    margin-top: 28px;
+    padding: 16px 12px 8px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+}
+
+.footer-dev {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    margin-bottom: 8px;
+}
+
+.footer-dev strong {
+    color: var(--neon);
+    font-weight: 700;
+}
+
+.footer-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.footer-dot {
+    color: var(--text-subtle);
+    user-select: none;
 }
 
 /* Número oculto arriba */

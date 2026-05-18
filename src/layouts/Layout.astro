@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import AppToolbar from '../components/AppToolbar.astro';
+import AppFooter from '../components/AppFooter.astro';
 
 interface Props {
     title?: string;
@@ -39,6 +40,7 @@ const { title = 'Guess the Number' } = Astro.props;
         <div class="bg-glow glow-1"></div>
         <div class="bg-glow glow-2"></div>
         <slot />
+        <AppFooter />
         <script>
             import '../scripts/preferences.ts';
         </script>

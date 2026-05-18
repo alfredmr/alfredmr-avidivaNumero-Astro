@@ -1,0 +1,14 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="app-footer">
+    <p class="footer-dev" data-i18n="footerDev">Developed by <strong>Alfred</strong></p>
+    <p class="footer-meta">
+        <span data-i18n="footerStack">Built with Astro</span>
+        <span class="footer-dot" aria-hidden="true">·</span>
+        <span data-i18n="footerVersion">v1.0.0</span>
+        <span class="footer-dot" aria-hidden="true">·</span>
+        <span>{year}</span>
+    </p>
+</footer>

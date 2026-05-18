@@ -27,4 +27,7 @@ export const es: Record<TranslationKey, string> = {
     toolbarLangEs: 'Español',
     themeLight: 'Modo claro',
     themeDark: 'Modo oscuro',
+    footerDev: 'Desarrollado por <strong>Alfred</strong>',
+    footerStack: 'Hecho con Astro',
+    footerVersion: 'v1.0.0',
 };

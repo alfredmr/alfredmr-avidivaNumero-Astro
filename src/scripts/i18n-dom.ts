@@ -1,6 +1,6 @@
 import { getLocale, t, type TranslationKey } from '../i18n';
 
-const HTML_KEYS = new Set<TranslationKey>(['configDesc', 'gameDesc', 'randomInfo']);
+const HTML_KEYS = new Set<TranslationKey>(['configDesc', 'gameDesc', 'randomInfo', 'footerDev']);
 
 export function applyTranslations(): void {
     document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {

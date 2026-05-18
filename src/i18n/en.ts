@@ -25,6 +25,9 @@ export const en = {
     toolbarLangEs: 'Spanish',
     themeLight: 'Light mode',
     themeDark: 'Dark mode',
+    footerDev: 'Developed by <strong>Alfred</strong>',
+    footerStack: 'Built with Astro',
+    footerVersion: 'v1.0.0',
 } as const;
 
 export type TranslationKey = keyof typeof en;
