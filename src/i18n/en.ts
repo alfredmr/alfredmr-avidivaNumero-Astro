@@ -1,0 +1,30 @@
+export const en = {
+    pageTitle: 'Guess the Number',
+    secretEncrypted: '◈ Encrypted code ◈',
+    secretDecrypted: '◈ Decrypted code ◈',
+    heading: 'GUESS THE NUMBER',
+    subtitle: 'Guessing system v2.0',
+    configDesc: 'Choose how the secret number is generated (from <strong>1 to 10</strong>):',
+    modeManual: '🧠 I choose',
+    modeRandom: '🎲 Random',
+    manualDesc: 'Think of a number and enter it. Nobody should see it.',
+    randomInfo:
+        'The system will pick a random number between <span>1</span> and <span>10</span>.<br />You won\'t see it until you win or lose!',
+    btnStart: '▶ Start mission',
+    gameDesc: 'Guess the code! You have <strong>3 attempts</strong>.',
+    btnRestart: '↺ Restart game',
+    resultPrefix: 'The code was: ',
+    msgInvalidConfig: '⚠ Enter a valid number between 1 and 10.',
+    msgInvalidGuess: '⚠ Enter a number between 1 and 10.',
+    msgStartRandom: '🎲 Random number generated. Guess the code!',
+    msgStartManual: '🔍 The code is encrypted above. Guess it!',
+    msgGuessSuccess: '🎉 AMAZING! You guessed the code: {{number}}',
+    msgGuessWrong: '❌ Incorrect. You have {{count}} attempt(s) left.',
+    msgGameOver: '💀 GAME OVER — No attempts left.',
+    toolbarLangEn: 'English',
+    toolbarLangEs: 'Spanish',
+    themeLight: 'Light mode',
+    themeDark: 'Dark mode',
+} as const;
+
+export type TranslationKey = keyof typeof en;

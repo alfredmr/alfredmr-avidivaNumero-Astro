@@ -1,3 +1,6 @@
+import { t, type TranslationKey } from '../i18n';
+import { applyTranslations } from './i18n-dom';
+
 const CHARS = '0123456789ABCDEF!@#$%&*?█▓▒░';
 
 let numeroSecreto: number | null = null;
@@ -6,8 +9,13 @@ let glitchInterval: ReturnType<typeof setInterval> | null = null;
 let juegoActivo = false;
 let modoActual: 'manual' | 'aleatorio' = 'manual';
 
+type MsgState = { key: TranslationKey; params?: Record<string, string | number>; tipo: string } | null;
+let lastConfigMsg: MsgState = null;
+let lastPistasMsg: MsgState = null;
+let codigoRevelado = false;
+
 const displaySecreto = document.getElementById('displaySecreto')!;
-const secretoLabel = document.querySelector('.secreto-label')!;
+const secretoLabel = document.getElementById('secretoLabel')!;
 const btnModoManual = document.getElementById('btnModoManual')!;
 const btnModoAleatorio = document.getElementById('btnModoAleatorio')!;
 const bloqueManual = document.getElementById('bloqueManual')!;
@@ -50,12 +58,17 @@ function detenerGlitch(): void {
     }
 }
 
+function actualizarLabelSecreto(): void {
+    secretoLabel.textContent = t(codigoRevelado ? 'secretDecrypted' : 'secretEncrypted');
+}
+
 function revelarNumeroArriba(): void {
     detenerGlitch();
     displaySecreto.textContent = String(numeroSecreto);
     displaySecreto.classList.remove('encriptado');
     displaySecreto.classList.add('revelado');
-    secretoLabel.textContent = '◈ Código desencriptado ◈';
+    codigoRevelado = true;
+    actualizarLabelSecreto();
 }
 
 function ocultarDisplay(): void {
@@ -63,7 +76,8 @@ function ocultarDisplay(): void {
     displaySecreto.textContent = '???';
     displaySecreto.classList.add('encriptado');
     displaySecreto.classList.remove('revelado');
-    secretoLabel.textContent = '◈ Código encriptado ◈';
+    codigoRevelado = false;
+    actualizarLabelSecreto();
 }
 
 function actualizarDots(): void {
@@ -73,9 +87,34 @@ function actualizarDots(): void {
     }
 }
 
-function setMensaje(el: HTMLElement, texto: string, tipo: string): void {
-    el.innerHTML = texto;
+function setMensaje(
+    el: HTMLElement,
+    key: TranslationKey | '',
+    tipo: string,
+    params?: Record<string, string | number>,
+    store: 'config' | 'pistas' | null = null
+): void {
+    if (key === '') {
+        el.innerHTML = '';
+        el.className = '';
+        if (store === 'config') lastConfigMsg = null;
+        if (store === 'pistas') lastPistasMsg = null;
+        return;
+    }
+    const state: MsgState = { key, params, tipo };
+    if (store === 'config') lastConfigMsg = state;
+    if (store === 'pistas') lastPistasMsg = state;
+    el.innerHTML = t(key, params);
     el.className = tipo ? 'msg-' + tipo : '';
+}
+
+function replayMensajes(): void {
+    if (lastConfigMsg) {
+        setMensaje(mensajeConfig, lastConfigMsg.key, lastConfigMsg.tipo, lastConfigMsg.params);
+    }
+    if (lastPistasMsg) {
+        setMensaje(mensajePistas, lastPistasMsg.key, lastPistasMsg.tipo, lastPistasMsg.params);
+    }
 }
 
 function cambiarModo(modo: 'manual' | 'aleatorio'): void {
@@ -84,7 +123,7 @@ function cambiarModo(modo: 'manual' | 'aleatorio'): void {
     btnModoAleatorio.classList.toggle('activo', modo === 'aleatorio');
     bloqueManual.classList.toggle('oculto', modo !== 'manual');
     bloqueAleatorio.classList.toggle('oculto', modo !== 'aleatorio');
-    setMensaje(mensajeConfig, '', '');
+    setMensaje(mensajeConfig, '', '', undefined, 'config');
 }
 
 function generarNumeroAleatorio(): number {
@@ -95,7 +134,7 @@ function iniciarJuego(): void {
     if (modoActual === 'manual') {
         const valor = parseInt(numeroPensado.value);
         if (isNaN(valor) || valor < 1 || valor > 10) {
-            setMensaje(mensajeConfig, '⚠ Ingresa un número válido entre 1 y 10.', 'warn');
+            setMensaje(mensajeConfig, 'msgInvalidConfig', 'warn', undefined, 'config');
             return;
         }
         numeroSecreto = valor;
@@ -104,6 +143,7 @@ function iniciarJuego(): void {
     }
     intentosRestantes = 3;
     juegoActivo = true;
+    codigoRevelado = false;
 
     pasoConfiguracion.classList.add('oculto');
     pasoJuego.classList.remove('oculto');
@@ -112,13 +152,11 @@ function iniciarJuego(): void {
     intentoUsuario.value = '';
     intentoUsuario.disabled = false;
 
-    const msgInicio =
-        modoActual === 'aleatorio'
-            ? '🎲 Número aleatorio generado. ¡Adivina el código!'
-            : '🔍 El código está encriptado arriba. ¡Adivina!';
-    setMensaje(mensajePistas, msgInicio, 'info');
+    const msgKey = modoActual === 'aleatorio' ? 'msgStartRandom' : 'msgStartManual';
+    setMensaje(mensajePistas, msgKey, 'info', undefined, 'pistas');
     actualizarDots();
     iniciarGlitch();
+    actualizarLabelSecreto();
 }
 
 function verificarIntento(): void {
@@ -127,7 +165,7 @@ function verificarIntento(): void {
     const suposicion = parseInt(intentoUsuario.value);
 
     if (isNaN(suposicion) || suposicion < 1 || suposicion > 10) {
-        setMensaje(mensajePistas, '⚠ Ingresa un número entre 1 y 10.', 'warn');
+        setMensaje(mensajePistas, 'msgInvalidGuess', 'warn', undefined, 'pistas');
         return;
     }
 
@@ -138,15 +176,27 @@ function verificarIntento(): void {
     if (suposicion === numeroSecreto) {
         juegoActivo = false;
         revelarNumeroArriba();
-        setMensaje(mensajePistas, `🎉 ¡INCREÍBLE! Adivinaste el código: ${numeroSecreto}`, 'success');
+        setMensaje(
+            mensajePistas,
+            'msgGuessSuccess',
+            'success',
+            { number: numeroSecreto! },
+            'pistas'
+        );
         intentoUsuario.disabled = true;
         btnReiniciar.classList.remove('oculto');
     } else if (intentosRestantes > 0) {
-        setMensaje(mensajePistas, `❌ Incorrecto. Te quedan ${intentosRestantes} intento(s).`, 'error');
+        setMensaje(
+            mensajePistas,
+            'msgGuessWrong',
+            'error',
+            { count: intentosRestantes },
+            'pistas'
+        );
     } else {
         juegoActivo = false;
         revelarNumeroArriba();
-        setMensaje(mensajePistas, '💀 GAME OVER — Se acabaron los intentos.', 'error');
+        setMensaje(mensajePistas, 'msgGameOver', 'error', undefined, 'pistas');
         numeroOculto.textContent = String(numeroSecreto);
         resultadoFinal.classList.remove('oculto');
         intentoUsuario.disabled = true;
@@ -171,12 +221,18 @@ function reiniciarJuego(): void {
     resultadoFinal.classList.add('oculto');
     btnReiniciar.classList.add('oculto');
 
-    setMensaje(mensajeConfig, '', '');
-    setMensaje(mensajePistas, '', '');
+    setMensaje(mensajeConfig, '', '', undefined, 'config');
+    setMensaje(mensajePistas, '', '', undefined, 'pistas');
 
     for (let i = 1; i <= 3; i++) {
         document.getElementById('dot' + i)!.classList.remove('usado');
     }
+}
+
+function onLocaleChange(): void {
+    applyTranslations();
+    actualizarLabelSecreto();
+    replayMensajes();
 }
 
 btnModoManual.addEventListener('click', () => cambiarModo('manual'));
@@ -193,5 +249,7 @@ document.addEventListener('keydown', (e) => {
         verificarIntento();
     }
 });
+
+window.addEventListener('localechange', onLocaleChange);
 
 ocultarDisplay();

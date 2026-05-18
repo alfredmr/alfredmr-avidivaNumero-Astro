@@ -2,44 +2,46 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Adivina el Número">
+<Layout title="Guess the Number">
     <div class="secreto-display" id="secretoDisplay">
-        <div class="secreto-label">◈ Código encriptado ◈</div>
+        <div class="secreto-label" data-i18n="secretEncrypted" id="secretoLabel">◈ Encrypted code ◈</div>
         <div class="secreto-numero encriptado" id="displaySecreto">???</div>
     </div>
 
     <div class="card">
-        <h1>ADIVINA EL NÚMERO</h1>
-        <p class="subtitle">Sistema de adivinanza v2.0</p>
+        <h1 data-i18n="heading">GUESS THE NUMBER</h1>
+        <p class="subtitle" data-i18n="subtitle">Guessing system v2.0</p>
 
         <div id="pasoConfiguracion">
-            <p class="desc">Elige cómo se genera el número secreto (del <strong>1 al 10</strong>):</p>
+            <p class="desc" data-i18n="configDesc">
+                Choose how the secret number is generated (from <strong>1 to 10</strong>):
+            </p>
 
             <div class="modo-selector">
-                <button type="button" class="modo-btn activo" id="btnModoManual">🧠 Yo elijo</button>
-                <button type="button" class="modo-btn" id="btnModoAleatorio">🎲 Aleatorio</button>
+                <button type="button" class="modo-btn activo" id="btnModoManual" data-i18n="modeManual">🧠 I choose</button>
+                <button type="button" class="modo-btn" id="btnModoAleatorio" data-i18n="modeRandom">🎲 Random</button>
             </div>
 
             <div id="bloqueManual">
-                <p class="desc">Piensa un número e ingrésalo. Nadie debe verlo.</p>
+                <p class="desc" data-i18n="manualDesc">Think of a number and enter it. Nobody should see it.</p>
                 <div class="input-group">
                     <input type="number" id="numeroPensado" min="1" max="10" placeholder="?" />
                 </div>
             </div>
 
             <div id="bloqueAleatorio" class="oculto">
-                <div class="modo-aleatorio-info">
-                    El sistema elegirá un número al azar entre <span>1</span> y <span>10</span>.<br />
-                    ¡Tú no lo verás hasta ganar o perder!
+                <div class="modo-aleatorio-info" data-i18n="randomInfo">
+                    The system will pick a random number between <span>1</span> and <span>10</span>.<br />
+                    You won't see it until you win or lose!
                 </div>
             </div>
 
-            <button type="button" class="btn btn-primary" id="btnIniciar">▶ Iniciar misión</button>
+            <button type="button" class="btn btn-primary" id="btnIniciar" data-i18n="btnStart">▶ Start mission</button>
             <p id="mensajeConfig"></p>
         </div>
 
         <div id="pasoJuego" class="oculto">
-            <p class="desc">¡Adivina el código! Tienes <strong>3 intentos</strong>.</p>
+            <p class="desc" data-i18n="gameDesc">Guess the code! You have <strong>3 attempts</strong>.</p>
 
             <div class="intentos-bar">
                 <div class="intento-dot" id="dot1"></div>
@@ -55,12 +57,14 @@ import Layout from '../layouts/Layout.astro';
             <p id="mensajePistas"></p>
 
             <div id="resultadoFinal" class="oculto">
-                El código era: <span id="numeroOculto"></span>
+                <span data-i18n="resultPrefix">The code was: </span><span id="numeroOculto"></span>
             </div>
 
-            <button type="button" class="btn btn-restart oculto" id="btnReiniciar">↺ Reiniciar juego</button>
+            <button type="button" class="btn btn-restart oculto" id="btnReiniciar" data-i18n="btnRestart">↺ Restart game</button>
         </div>
     </div>
-</Layout>
 
-<script src="../scripts/game.ts"></script>
+    <script>
+        import '../scripts/game.ts';
+    </script>
+</Layout>

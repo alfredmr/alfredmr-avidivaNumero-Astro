@@ -1,28 +1,46 @@
 ---
 import '../styles/global.css';
+import AppToolbar from '../components/AppToolbar.astro';
 
 interface Props {
     title?: string;
 }
 
-const { title = 'Adivina el Número' } = Astro.props;
+const { title = 'Guess the Number' } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{title}</title>
+        <script is:inline>
+            (function () {
+                var theme = localStorage.getItem('theme');
+                if (!theme) {
+                    theme = window.matchMedia('(prefers-color-scheme: light)').matches
+                        ? 'light'
+                        : 'dark';
+                }
+                var lang = localStorage.getItem('locale') || 'en';
+                document.documentElement.setAttribute('data-theme', theme);
+                document.documentElement.lang = lang;
+            })();
+        </script>
         <link
             href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap"
             rel="stylesheet"
         />
     </head>
     <body>
+        <AppToolbar />
         <div class="bg-grid"></div>
         <div class="bg-glow glow-1"></div>
         <div class="bg-glow glow-2"></div>
         <slot />
+        <script>
+            import '../scripts/preferences.ts';
+        </script>
     </body>
 </html>

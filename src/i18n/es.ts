@@ -1,0 +1,30 @@
+import type { TranslationKey } from './en';
+
+export const es: Record<TranslationKey, string> = {
+    pageTitle: 'Adivina el Número',
+    secretEncrypted: '◈ Código encriptado ◈',
+    secretDecrypted: '◈ Código desencriptado ◈',
+    heading: 'ADIVINA EL NÚMERO',
+    subtitle: 'Sistema de adivinanza v2.0',
+    configDesc: 'Elige cómo se genera el número secreto (del <strong>1 al 10</strong>):',
+    modeManual: '🧠 Yo elijo',
+    modeRandom: '🎲 Aleatorio',
+    manualDesc: 'Piensa un número e ingrésalo. Nadie debe verlo.',
+    randomInfo:
+        'El sistema elegirá un número al azar entre <span>1</span> y <span>10</span>.<br />¡Tú no lo verás hasta ganar o perder!',
+    btnStart: '▶ Iniciar misión',
+    gameDesc: '¡Adivina el código! Tienes <strong>3 intentos</strong>.',
+    btnRestart: '↺ Reiniciar juego',
+    resultPrefix: 'El código era: ',
+    msgInvalidConfig: '⚠ Ingresa un número válido entre 1 y 10.',
+    msgInvalidGuess: '⚠ Ingresa un número entre 1 y 10.',
+    msgStartRandom: '🎲 Número aleatorio generado. ¡Adivina el código!',
+    msgStartManual: '🔍 El código está encriptado arriba. ¡Adivina!',
+    msgGuessSuccess: '🎉 ¡INCREÍBLE! Adivinaste el código: {{number}}',
+    msgGuessWrong: '❌ Incorrecto. Te quedan {{count}} intento(s).',
+    msgGameOver: '💀 GAME OVER — Se acabaron los intentos.',
+    toolbarLangEn: 'Inglés',
+    toolbarLangEs: 'Español',
+    themeLight: 'Modo claro',
+    themeDark: 'Modo oscuro',
+};
