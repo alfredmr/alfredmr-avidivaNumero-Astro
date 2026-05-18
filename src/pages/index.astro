@@ -1,0 +1,66 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Adivina el Número">
+    <div class="secreto-display" id="secretoDisplay">
+        <div class="secreto-label">◈ Código encriptado ◈</div>
+        <div class="secreto-numero encriptado" id="displaySecreto">???</div>
+    </div>
+
+    <div class="card">
+        <h1>ADIVINA EL NÚMERO</h1>
+        <p class="subtitle">Sistema de adivinanza v2.0</p>
+
+        <div id="pasoConfiguracion">
+            <p class="desc">Elige cómo se genera el número secreto (del <strong>1 al 10</strong>):</p>
+
+            <div class="modo-selector">
+                <button type="button" class="modo-btn activo" id="btnModoManual">🧠 Yo elijo</button>
+                <button type="button" class="modo-btn" id="btnModoAleatorio">🎲 Aleatorio</button>
+            </div>
+
+            <div id="bloqueManual">
+                <p class="desc">Piensa un número e ingrésalo. Nadie debe verlo.</p>
+                <div class="input-group">
+                    <input type="number" id="numeroPensado" min="1" max="10" placeholder="?" />
+                </div>
+            </div>
+
+            <div id="bloqueAleatorio" class="oculto">
+                <div class="modo-aleatorio-info">
+                    El sistema elegirá un número al azar entre <span>1</span> y <span>10</span>.<br />
+                    ¡Tú no lo verás hasta ganar o perder!
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="btnIniciar">▶ Iniciar misión</button>
+            <p id="mensajeConfig"></p>
+        </div>
+
+        <div id="pasoJuego" class="oculto">
+            <p class="desc">¡Adivina el código! Tienes <strong>3 intentos</strong>.</p>
+
+            <div class="intentos-bar">
+                <div class="intento-dot" id="dot1"></div>
+                <div class="intento-dot" id="dot2"></div>
+                <div class="intento-dot" id="dot3"></div>
+            </div>
+
+            <div class="input-group">
+                <input type="number" id="intentoUsuario" min="1" max="10" placeholder="?" />
+                <button type="button" class="btn btn-guess" id="btnGuess">⚡</button>
+            </div>
+
+            <p id="mensajePistas"></p>
+
+            <div id="resultadoFinal" class="oculto">
+                El código era: <span id="numeroOculto"></span>
+            </div>
+
+            <button type="button" class="btn btn-restart oculto" id="btnReiniciar">↺ Reiniciar juego</button>
+        </div>
+    </div>
+</Layout>
+
+<script src="../scripts/game.ts"></script>
